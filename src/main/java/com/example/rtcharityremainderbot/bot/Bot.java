@@ -1,16 +1,21 @@
 package com.example.rtcharityremainderbot.bot;
 
 import com.example.rtcharityremainderbot.config.BotConfig;
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+@Slf4j
 @Component
 public class Bot extends TelegramLongPollingBot {
 
     final BotConfig config;
+
+
 
     public Bot(BotConfig config) {
         this.config = config;
@@ -49,7 +54,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            log.error("Error occurred while sending the message: {}", e.getMessage());
         }
     }
 
@@ -62,7 +67,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            log.error("Error occurred while sending the message: {}", e.getMessage());
         }
     }
 }
