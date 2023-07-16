@@ -1,1 +1,0 @@
-worker: java -jar rt-charity-remainder-bot-0.0.1-SNAPSHOT.jar
