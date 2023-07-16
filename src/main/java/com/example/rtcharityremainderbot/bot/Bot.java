@@ -1,25 +1,33 @@
 package com.example.rtcharityremainderbot.bot;
 
 import com.example.rtcharityremainderbot.config.BotConfig;
+import com.example.rtcharityremainderbot.model.User;
+import com.example.rtcharityremainderbot.model.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import lombok.extern.slf4j.XSlf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.List;
+
 @Slf4j
 @Component
 public class Bot extends TelegramLongPollingBot {
 
+    @Autowired
+    public Bot(UserRepository userRepository, BotConfig botConfig) {
+        this.userRepository = userRepository;
+        this.config = botConfig;
+    }
+
     final BotConfig config;
 
+    private final UserRepository userRepository;
 
 
-    public Bot(BotConfig config) {
-        this.config = config;
-    }
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -27,12 +35,23 @@ public class Bot extends TelegramLongPollingBot {
             String userName = update.getMessage().getChat().getUserName();
             String messageText = update.getMessage().getText();
             Long chatId = update.getMessage().getChatId();
+
+            if (messageText.contains("/send")) {
+                String textToSend = messageText.substring(messageText.indexOf(" "));
+                if (!textToSend.isEmpty()) {
+                    List<User> users = (List<User>) userRepository.findAll();
+                    for (User user : users) {
+                        sendMessage(user.getChatId(), textToSend);
+                    }
+                }
+            }
+
             switch (messageText) {
                 case "/start":
                     sendGreetingMessage(chatId, userName);
                     break;
                 default:
-                    sendMessage(chatId, "Sorry, text was not recognised");
+                    break;
             }
         }
     }
