@@ -2,6 +2,10 @@ package com.example.rtcharityremainderbot.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Data;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity(name = "Users")
 public class User {
@@ -16,6 +20,16 @@ public class User {
     private String userName;
 
     private String privateCode;
+
+    private Date registeredTime;
+
+    public Date getRegisteredTime() {
+        return registeredTime;
+    }
+
+    public void setRegisteredTime(Date registeredTime) {
+        this.registeredTime = registeredTime;
+    }
 
     public Long getChatId() {
         return chatId;

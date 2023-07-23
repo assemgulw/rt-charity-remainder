@@ -11,7 +11,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import static java.time.LocalTime.now;
 
 @Slf4j
 @Component
@@ -48,6 +52,13 @@ public class Bot extends TelegramLongPollingBot {
 
             switch (messageText) {
                 case "/start":
+                    Optional<User> userOptional = userRepository.findById(chatId);
+                    Date currentDate = new Date();
+                    userOptional.ifPresent(user -> {
+                        user.setRegisteredTime(currentDate);
+                        user.setChatId(chatId);
+                        userRepository.save(user);
+                    });
                     sendGreetingMessage(chatId, userName);
                     break;
                 default:
