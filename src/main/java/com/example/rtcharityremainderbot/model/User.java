@@ -23,6 +23,8 @@ public class User {
 
     private Date registeredTime;
 
+    private Boolean isAdmin;
+
     public Date getRegisteredTime() {
         return registeredTime;
     }
@@ -69,5 +71,13 @@ public class User {
 
     public void setPrivateCode(String privateCode) {
         this.privateCode = privateCode;
+    }
+
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
     }
 }
